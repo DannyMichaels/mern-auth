@@ -1,6 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-const Login = () => {
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { loginUser } from '../../actions/authActions';
+import classnames from 'classnames';
+
+const Login = (props) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -16,6 +21,22 @@ const Login = () => {
     }));
   };
 
+  useEffect(() => {
+    if (props.errors) {
+      setFormData((prevState) => ({
+        ...prevState,
+        errors: props.errors,
+      }));
+    }
+  }, [props.errors]);
+
+  useEffect(() => {
+    // If logged in and user navigates to Login page, should redirect them to dashboard
+    if (props.auth.isAuthenticated) {
+      props.history.push('/dashboard');
+    }
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const userData = {
@@ -23,7 +44,9 @@ const Login = () => {
       password: formData.password,
     };
     console.log({ userData });
+    props.loginUser(userData);
   };
+
   const { errors } = formData;
 
   return (
@@ -43,8 +66,21 @@ const Login = () => {
           </div>
           <form noValidate onSubmit={handleSubmit}>
             <div className="input-field col s12">
-              <input onChange={handleChange} value={formData.email} error={errors.email} id="email" type="email" />
+              <input
+                onChange={handleChange}
+                value={formData.email}
+                error={errors.email}
+                id="email"
+                type="email"
+                className={classnames('', {
+                  invalid: errors.email || errors.emailnotfound,
+                })}
+              />
               <label htmlFor="email">Email</label>
+              <span className="red-text">
+                {errors.email}
+                {errors.emailnotfound}
+              </span>
             </div>
             <div className="input-field col s12">
               <input
@@ -53,8 +89,15 @@ const Login = () => {
                 error={errors.password}
                 id="password"
                 type="password"
+                className={classnames('', {
+                  invalid: errors.password || errors.passwordincorrect,
+                })}
               />
               <label htmlFor="password">Password</label>
+              <span className="red-text">
+                {errors.password}
+                {errors.passwordincorrect}
+              </span>
             </div>
             <div className="col s12" style={{ paddingLeft: '11.250px' }}>
               <button
@@ -76,4 +119,16 @@ const Login = () => {
     </div>
   );
 };
-export default Login;
+
+// Login.propTypes = {
+//   loginUser: PropTypes.func.isRequired,
+//   auth: PropTypes.object.isRequired,
+//   errors: PropTypes.object.isRequired,
+// };
+
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+  errors: state.errors,
+});
+
+export default connect(mapStateToProps, { loginUser })(Login);

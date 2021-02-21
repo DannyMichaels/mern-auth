@@ -1,6 +1,11 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-const Register = () => {
+import { useState, useEffect } from 'react';
+import { Link, withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { registerUser } from '../../actions/authActions';
+import classnames from 'classnames';
+
+const Register = (props) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -27,9 +32,27 @@ const Register = () => {
       password: formData.password,
       passwordConfirm: formData.passwordConfirm,
     };
+    props.registerUser(newUser, props.history);
+
     console.log({ newUser });
   };
   const { errors } = formData;
+
+  useEffect(() => {
+    if (props.errors) {
+      setFormData((prevState) => ({
+        ...prevState,
+        errors: props.errors,
+      }));
+    }
+  }, [props.errors]);
+
+  useEffect(() => {
+    // If logged in and user navigates to Register page, should redirect them to dashboard
+    if (props.auth.isAuthenticated) {
+      props.history.push('/dashboard');
+    }
+  }, [props.auth.isAuthenticated, props.history]);
 
   return (
     <div className="container">
@@ -48,12 +71,32 @@ const Register = () => {
           </div>
           <form noValidate onSubmit={handleSubmit}>
             <div className="input-field col s12">
-              <input onChange={handleChange} value={formData.name} error={errors.name} id="name" type="text" />
+              <input
+                onChange={handleChange}
+                value={formData.name}
+                error={errors.name}
+                id="name"
+                type="text"
+                className={classnames('', {
+                  invalid: errors.name,
+                })}
+              />
               <label htmlFor="name">Name</label>
+              <span className="red-text">{errors.name}</span>
             </div>
             <div className="input-field col s12">
-              <input onChange={handleChange} value={formData.email} error={errors.email} id="email" type="email" />
+              <input
+                onChange={handleChange}
+                value={formData.email}
+                error={errors.email}
+                id="email"
+                type="email"
+                className={classnames('', {
+                  invalid: errors.email,
+                })}
+              />
               <label htmlFor="email">Email</label>
+              <span className="red-text">{errors.email}</span>
             </div>
             <div className="input-field col s12">
               <input
@@ -62,18 +105,26 @@ const Register = () => {
                 error={errors.password}
                 id="password"
                 type="password"
+                className={classnames('', {
+                  invalid: errors.password,
+                })}
               />
               <label htmlFor="password">Password</label>
+              <span className="red-text">{errors.password}</span>
             </div>
             <div className="input-field col s12">
               <input
                 onChange={handleChange}
                 value={formData.passwordConfirm}
                 error={errors.passwordConfirm}
-                id="password2"
+                id="passwordConfirm"
                 type="password"
+                className={classnames('', {
+                  invalid: errors.passwordConfirm,
+                })}
               />
               <label htmlFor="password2">Confirm Password</label>
+              <span className="red-text">{errors.passwordConfirm}</span>
             </div>
             <div className="col s12" style={{ paddingLeft: '11.250px' }}>
               <button
@@ -95,4 +146,16 @@ const Register = () => {
     </div>
   );
 };
-export default Register;
+
+// Register.propTypes = {
+//   registerUser: PropTypes.func.isRequired,
+//   auth: PropTypes.object.isRequired,
+//   errors: PropTypes.object.isRequired,
+// };
+
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+  errors: state.errors,
+});
+
+export default connect(mapStateToProps, { registerUser })(withRouter(Register));
