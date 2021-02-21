@@ -4,6 +4,10 @@ const bodyParser = require("body-parser");
 const passport = require("passport");
 const users = require("./routes/api/users");
 const app = express();
+const cors = require("cors");
+
+app.use(cors());
+
 require("dotenv").config();
 // Bodyparser middleware
 app.use(

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { loginUser } from '../../actions/authActions';
 import classnames from 'classnames';
@@ -9,8 +8,9 @@ const Login = (props) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    errors: {},
   });
+
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -23,10 +23,7 @@ const Login = (props) => {
 
   useEffect(() => {
     if (props.errors) {
-      setFormData((prevState) => ({
-        ...prevState,
-        errors: props.errors,
-      }));
+      setErrors(props.errors);
     }
   }, [props.errors]);
 
@@ -46,8 +43,6 @@ const Login = (props) => {
     console.log({ userData });
     props.loginUser(userData);
   };
-
-  const { errors } = formData;
 
   return (
     <div className="container">
@@ -119,12 +114,6 @@ const Login = (props) => {
     </div>
   );
 };
-
-// Login.propTypes = {
-//   loginUser: PropTypes.func.isRequired,
-//   auth: PropTypes.object.isRequired,
-//   errors: PropTypes.object.isRequired,
-// };
 
 const mapStateToProps = (state) => ({
   auth: state.auth,

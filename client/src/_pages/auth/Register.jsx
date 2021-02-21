@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { registerUser } from '../../actions/authActions';
 import classnames from 'classnames';
@@ -11,8 +10,9 @@ const Register = (props) => {
     email: '',
     password: '',
     passwordConfirm: '',
-    errors: {},
   });
+
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -36,14 +36,10 @@ const Register = (props) => {
 
     console.log({ newUser });
   };
-  const { errors } = formData;
 
   useEffect(() => {
     if (props.errors) {
-      setFormData((prevState) => ({
-        ...prevState,
-        errors: props.errors,
-      }));
+      setErrors(props.errors);
     }
   }, [props.errors]);
 
@@ -146,12 +142,6 @@ const Register = (props) => {
     </div>
   );
 };
-
-// Register.propTypes = {
-//   registerUser: PropTypes.func.isRequired,
-//   auth: PropTypes.object.isRequired,
-//   errors: PropTypes.object.isRequired,
-// };
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
