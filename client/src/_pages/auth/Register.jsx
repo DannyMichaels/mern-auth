@@ -27,7 +27,7 @@ const Register = () => {
       password: formData.password,
       passwordConfirm: formData.passwordConfirm,
     };
-    console.log(newUser);
+    console.log({ newUser });
   };
   const { errors } = formData;
 
