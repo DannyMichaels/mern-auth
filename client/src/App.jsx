@@ -1,12 +1,14 @@
 import Navbar from './components/layout/Navbar';
 import './App.css';
 import AppRouter from './routes/AppRouter';
+import { Provider } from 'react-redux';
+import store from './store';
 
 const App = () => (
-  <div className="App">
+  <Provider store={store}>
     <Navbar />
     <AppRouter />
-  </div>
+  </Provider>
 );
 
 export default App;
