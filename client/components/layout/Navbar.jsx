@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 const Navbar = () => (
   <div className="navbar-fixed">
@@ -7,9 +7,10 @@ const Navbar = () => (
         <Link
           to="/"
           style={{
-            fontFamily: "monospace",
+            fontFamily: 'monospace',
           }}
-          className="col s5 brand-logo center black-text">
+          className="col s5 brand-logo center black-text"
+        >
           <i className="material-icons">code</i>
           MERN
         </Link>
