@@ -1,11 +1,11 @@
-import Landing from './components/layout/Landing';
 import Navbar from './components/layout/Navbar';
 import './App.css';
+import AppRouter from './routes/AppRouter';
 
 const App = () => (
   <div className="App">
     <Navbar />
-    <Landing />
+    <AppRouter />
   </div>
 );
 
