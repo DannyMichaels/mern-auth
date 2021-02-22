@@ -11,7 +11,6 @@ const Login = (props) => {
   });
 
   const [errors, setErrors] = useState({});
-  const [isLoggedIn, setLoggedIn] = useState(false);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -36,7 +35,7 @@ const Login = (props) => {
     if (props.auth.isAuthenticated) {
       props.history.push('/dashboard');
     }
-  }, []);
+  }, [props.auth.isAuthenticated]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
