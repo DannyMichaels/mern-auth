@@ -26,7 +26,10 @@ const Login = (props) => {
     if (props.errors) {
       setErrors(props.errors);
     }
-  }, [props.errors]);
+    if (props.auth.isAuthenticated) {
+      props.history.push('/dashboard');
+    }
+  }, [props]);
 
   useMemo(() => {
     // If logged in and user navigates to Login page, should redirect them to dashboard
