@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { registerUser } from '../../actions/authActions';
@@ -43,7 +43,7 @@ const Register = (props) => {
     }
   }, [props.errors]);
 
-  useEffect(() => {
+  useMemo(() => {
     // If logged in and user navigates to Register page, should redirect them to dashboard
     if (props.auth.isAuthenticated) {
       props.history.push('/dashboard');

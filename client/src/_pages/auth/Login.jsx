@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { loginUser } from '../../actions/authActions';
@@ -11,6 +11,7 @@ const Login = (props) => {
   });
 
   const [errors, setErrors] = useState({});
+  const [isLoggedIn, setLoggedIn] = useState(false);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -27,7 +28,7 @@ const Login = (props) => {
     }
   }, [props.errors]);
 
-  useEffect(() => {
+  useMemo(() => {
     // If logged in and user navigates to Login page, should redirect them to dashboard
     if (props.auth.isAuthenticated) {
       props.history.push('/dashboard');
